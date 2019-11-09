@@ -93,6 +93,10 @@ module.exports = function splitShard(store, data, cb) {
                   seqTime: now,
                 })
 
+                shard.ClosingTime = now
+                shard.ExpirationTime = now + stream.RetentionPeriodHours * 1000
+                console.log("Stream " + key + " closing shard " + shardIx + " at time " + shard.ClosingTime + ", expiring at " + shard.ExpirationTime)
+
                 stream.Shards.push({
                   ParentShardId: shardId,
                   HashKeyRange: {
