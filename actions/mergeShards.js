@@ -74,6 +74,12 @@ module.exports = function mergeShards(store, data, cb) {
 
               stream.StreamStatus = 'ACTIVE'
 
+              shards[0].ClosingTime = now
+              shards[0].ExpirationTime = now + stream.RetentionPeriodHours * 1000
+              shards[1].ClosingTime = now
+              shards[1].ExpirationTime = now + stream.RetentionPeriodHours * 1000
+              console.log("Stream " + key + " merging shards " + shardIxs[0] + " and " + shardIxs[1] + " at time " + shards[0].ClosingTime + ", expiring at " + shards[0].ExpirationTime)
+
               shards[0].SequenceNumberRange.EndingSequenceNumber = db.stringifySequence({
                 shardCreateTime: db.parseSequence(shards[0].SequenceNumberRange.StartingSequenceNumber).shardCreateTime,
                 shardIx: shardIxs[0],
